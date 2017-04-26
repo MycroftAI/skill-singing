@@ -1,2 +1,5 @@
-# skill-singing
-Mycroft Sings
+# Singing Skill
+
+## Usage:
+* `sing`
+

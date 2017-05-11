@@ -51,7 +51,7 @@ class SingingSkill(MycroftSkill):
         self.emitter.on("mycroft.sing", self.sing)
 
     def sing(self, message):
-        self.process = play_mp3(self.play_list[0])
+        self.process = play_mp3(self.play_list[3])
 
     def handle_intent(self, message):
         rando = random.randint(0, 5)

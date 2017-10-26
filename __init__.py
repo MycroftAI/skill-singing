@@ -48,7 +48,7 @@ class SingingSkill(MycroftSkill):
         intent = IntentBuilder("SingingIntent").require(
             "SingingKeyword").build()
         self.register_intent(intent, self.handle_intent)
-        self.emitter.on("mycroft.sing", self.sing)
+        self.add_event("mycroft.sing", self.sing, False)
 
     def sing(self, message):
         self.process = play_mp3(self.play_list[3])

@@ -17,19 +17,12 @@
 
 
 import random
-import time
 from os.path import dirname, join
 
 from adapt.intent import IntentBuilder
-from mycroft.messagebus.message import Message
-from mycroft.skills.core import MycroftSkill
-from mycroft.util import play_mp3
-from mycroft.util.log import getLogger
-
-__author__ = 'kfezer'
-
-LOGGER = getLogger(__name__)
-
+from mycroft import MycroftSkill, intent_handler
+from mycroft.skills.audioservice import AudioService
+from mycroft.audio import wait_while_speaking
 
 class SingingSkill(MycroftSkill):
     def __init__(self):
@@ -45,24 +38,21 @@ class SingingSkill(MycroftSkill):
         }
 
     def initialize(self):
-        intent = IntentBuilder("SingingIntent").require(
-            "SingingKeyword").build()
-        self.register_intent(intent, self.handle_intent)
+        self.audioservice = AudioService(self.emitter)
         self.add_event("mycroft.sing", self.sing, False)
 
     def sing(self, message):
         self.process = play_mp3(self.play_list[3])
 
-    def handle_intent(self, message):
-        rando = random.randint(0, 5)
-        file = self.play_list[rando]
+    @intent_handler(IntentBuilder('').require('Sing'))
+    def handle_sing(self, message):
+        path = random.choice(self.play_list)
         try:
             self.speak_dialog('singing')
-            time.sleep(3)
-            self.process = play_mp3(file)
-
+            wait_while_speaking()
+            self.audioservice.play(path)
         except Exception as e:
-            LOGGER.error("Error: {0}".format(e))
+            self.log.error("Error: {0}".format(e))
 
     def stop(self):
         if self.process and self.process.poll() is None:

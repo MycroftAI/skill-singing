@@ -1,0 +1,12 @@
+{
+  "utterance": "sing a song for me",
+  "intent_type": "handle_sing",
+  "intent": {
+    "Sing": "sing"
+  },
+  "expected_data": {
+      "__type__": "mycroft.audio.service.play"
+  }
+}
+
+

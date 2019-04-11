@@ -29,16 +29,16 @@ class SingingSkill(MycroftSkill):
         super(SingingSkill, self).__init__(name="SingingSkill")
         self.process = None
         self.play_list = {
-            0: join(dirname(__file__), "popey-favourite.mp3"),
-            1: join(dirname(__file__), "popey-jackson.mp3"),
-            2: join(dirname(__file__), "popey-jerusalem.mp3"),
-            3: join(dirname(__file__), "popey-lose-yourself.mp3"),
-            4: join(dirname(__file__), "popey-lovemetender.mp3"),
-            5: join(dirname(__file__), "popey-rocketman.mp3"),
+            0: join(dirname(__file__), "p0.mp3"),
+            1: join(dirname(__file__), "p1.mp3"),
+            2: join(dirname(__file__), "p0.mp3"),
+            3: join(dirname(__file__), "p1.mp3"),
+            4: join(dirname(__file__), "p0.mp3"),
+            5: join(dirname(__file__), "p1.mp3"),
         }
 
     def initialize(self):
-        self.audioservice = AudioService(self.bus)
+        self.audioservice = AudioService(self.emitter)
         self.add_event("mycroft.sing", self.sing, False)
 
     def sing(self, message):

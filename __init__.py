@@ -38,7 +38,7 @@ class SingingSkill(MycroftSkill):
         }
 
     def initialize(self):
-        self.audioservice = AudioService(self.emitter)
+        self.audioservice = AudioService(self.bus)
         self.add_event("mycroft.sing", self.sing, False)
 
     def sing(self, message):

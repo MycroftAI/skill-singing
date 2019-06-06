@@ -23,6 +23,8 @@ from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_handler
 from mycroft.skills.audioservice import AudioService
 from mycroft.audio import wait_while_speaking
+from mycroft.util import play_mp3
+
 
 class SingingSkill(MycroftSkill):
     def __init__(self):

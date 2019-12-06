@@ -54,12 +54,6 @@ class SingingSkill(MycroftSkill):
         except Exception as e:
             self.log.error("Error: {0}".format(e))
 
-    def stop(self):
-        if self.process and self.process.poll() is None:
-            self.speak_dialog('singing.stop')
-            self.process.terminate()
-            self.process.wait()
-
 
 def create_skill():
     return SingingSkill()

@@ -42,7 +42,7 @@ class SingingSkill(MycroftSkill):
         self.add_event("mycroft.sing", self.sing, False)
 
     def sing(self, message):
-        self.process = play_mp3(self.play_list[3])
+        self.audioservice.play(self.play_list[3])
 
     @intent_handler(IntentBuilder('').require('Sing'))
     def handle_sing(self, message):

@@ -24,6 +24,7 @@ from mycroft import MycroftSkill, intent_handler
 from mycroft.skills.audioservice import AudioService
 from mycroft.audio import wait_while_speaking
 
+
 class SingingSkill(MycroftSkill):
     def __init__(self):
         super(SingingSkill, self).__init__(name="SingingSkill")
@@ -42,7 +43,11 @@ class SingingSkill(MycroftSkill):
         self.add_event("mycroft.sing", self.sing, False)
 
     def sing(self, message):
-        self.audioservice.play(self.play_list[3])
+        """Get song ID from message data or default to song ID 3."""
+        song = message.data.get('song', 3)
+        if isinstance(song, int) and 0 <= song <= 5:
+            path = self.play_list[song]
+            self.audioservice.play(path)
 
     @intent_handler(IntentBuilder('').require('Sing'))
     def handle_sing(self, message):

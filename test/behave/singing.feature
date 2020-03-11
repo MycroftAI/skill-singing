@@ -7,7 +7,7 @@ Feature: mycroft-singing
       Then "mycroft-singing" should reply with dialog from "singing.dialog"
       And mycroft should sing
 
-  Scenario: ask mycroft to sing a song
+  Scenario: ask mycroft to stop singing
     Given an english speaking user
     And Mycroft is singing
       When the user says "stop singing"

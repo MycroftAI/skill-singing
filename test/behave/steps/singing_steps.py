@@ -1,4 +1,4 @@
-# Copyright 2017 Mycroft AI Inc.
+# Copyright 2020 Mycroft AI Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,29 +16,23 @@ import time
 
 from behave import given, then
 
-from mycroft.messagebus import Message
+from mycroft.audio import wait_while_speaking
+
+from test.integrationtests.voight_kampff import emit_utterance, wait_for_dialog
 
 
 @given('mycroft is singing')
 def given_news_playing(context):
-    context.bus.emit(Message('recognizer_loop:utterance',
-                             data={'utterances': ['sing a song'],
-                                   'lang': 'en-us',
-                                   'session': '',
-                                   'ident': time.time()},
-                             context={'client_name': 'mycroft_listener'}))
-    time.sleep(10)
+    emit_utterance(context.bus, "sing a song")
+    wait_for_dialog(context.bus, ['singing'])
+    wait_while_speaking()
+    time.sleep(3)
     context.bus.clear_messages()
 
 
 @given('mycroft is not singing')
 def given_nothing_playing(context):
-    context.bus.emit(Message('recognizer_loop:utterance',
-                             data={'utterances': ['stop playback'],
-                                   'lang': 'en-US',
-                                   'session': '',
-                                   'ident': time.time()},
-                             context={'client_name': 'mycroft_listener'}))
+    emit_utterance(context.bus, "stop playback")
     time.sleep(5)
     context.bus.clear_messages()
 
@@ -48,7 +42,7 @@ def then_playback_start(context):
     cnt = 0
     while context.bus.get_messages('mycroft.audio.service.play') == []:
         if cnt > 20:
-            assert False
+            assert False, 'Mycroft didn\'t start singing :('
             break
         time.sleep(0.5)
 
@@ -58,7 +52,7 @@ def then_playback_stop(context):
     cnt = 0
     while context.bus.get_messages('mycroft.audio.service.stop') == []:
         if cnt > 20:
-            assert False
+            assert False, 'Mycroft didn\'t stop singing'
             break
         else:
             cnt += 1

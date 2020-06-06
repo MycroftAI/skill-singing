@@ -17,7 +17,8 @@
 
 
 import random
-from os.path import dirname, join
+from glob import glob; 
+from os.path import dirname
 
 from adapt.intent import IntentBuilder
 from mycroft import MycroftSkill, intent_handler
@@ -28,14 +29,9 @@ class SingingSkill(MycroftSkill):
     def __init__(self):
         super(SingingSkill, self).__init__(name="SingingSkill")
         self.process = None
-        self.play_list = {
-            0: join(dirname(__file__), "popey-favourite.mp3"),
-            1: join(dirname(__file__), "popey-jackson.mp3"),
-            2: join(dirname(__file__), "popey-jerusalem.mp3"),
-            3: join(dirname(__file__), "popey-lose-yourself.mp3"),
-            4: join(dirname(__file__), "popey-lovemetender.mp3"),
-            5: join(dirname(__file__), "popey-rocketman.mp3"),
-        }
+        mypath = dirname(__file__)
+        self.log.warning(mypath)
+        self.play_list = glob(mypath + '**/*.mp3')
 
     def initialize(self):
         self.audioservice = AudioService(self.bus)

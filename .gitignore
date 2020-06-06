@@ -1,5 +1,7 @@
 settings.json
 
+*.mp3 
+
 # python compiled files
 *.pyc
 __pycache__/

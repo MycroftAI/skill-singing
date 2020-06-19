@@ -39,12 +39,16 @@ def given_nothing_playing(context):
 
 @then('mycroft should sing')
 def then_playback_start(context):
-    cnt = 0
-    while context.bus.get_messages('mycroft.audio.service.play') == []:
-        if cnt > 20:
-            assert False, 'Mycroft didn\'t start singing :('
-            break
-        time.sleep(0.5)
+    def check_for_play(message):
+        return (message.msg_type == 'mycroft.audio.service.play', '')
+
+    passed, debug = then_wait('mycroft.audio.service.play', check_for_play,
+                              context)
+    if not passed:
+        assert_msg = debug
+        assert_msg += mycroft_responses(context)
+
+    assert passed, assert_msg or "Mycroft didn't start singing"
 
 
 @then('mycroft should stop singing')

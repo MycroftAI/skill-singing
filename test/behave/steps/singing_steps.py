@@ -18,7 +18,7 @@ from behave import given, then
 
 from mycroft.audio import wait_while_speaking
 
-from test.integrationtests.voight_kampff import emit_utterance, wait_for_dialog
+from test.integrationtests.voight_kampff import emit_utterance, wait_for_dialog, then_wait
 
 
 @given('mycroft is singing')
@@ -39,21 +39,27 @@ def given_nothing_playing(context):
 
 @then('mycroft should sing')
 def then_playback_start(context):
-    cnt = 0
-    while context.bus.get_messages('mycroft.audio.service.play') == []:
-        if cnt > 20:
-            assert False, 'Mycroft didn\'t start singing :('
-            break
-        time.sleep(0.5)
+    def check_for_play(message):
+        return (message.msg_type == 'mycroft.audio.service.play', '')
+
+    passed, debug = then_wait('mycroft.audio.service.play', check_for_play,
+                              context)
+    if not passed:
+        assert_msg = debug
+        assert_msg += mycroft_responses(context)
+
+    assert passed, assert_msg or "Mycroft didn't start singing"
 
 
 @then('mycroft should stop singing')
 def then_playback_stop(context):
-    cnt = 0
-    while context.bus.get_messages('mycroft.audio.service.stop') == []:
-        if cnt > 20:
-            assert False, 'Mycroft didn\'t stop singing'
-            break
-        else:
-            cnt += 1
-        time.sleep(0.5)
+    def check_for_stop(message):
+        return (message.msg_type == 'mycroft.audio.service.stop', '')
+
+    passed, debug = then_wait('mycroft.audio.service.stop', check_for_stop,
+                              context)
+    if not passed:
+        assert_msg = debug
+        assert_msg += mycroft_responses(context)
+
+    assert passed, assert_msg or "Mycroft didn't stop singing"

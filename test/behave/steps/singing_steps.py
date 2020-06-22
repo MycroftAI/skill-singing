@@ -18,7 +18,7 @@ from behave import given, then
 
 from mycroft.audio import wait_while_speaking
 
-from test.integrationtests.voight_kampff import emit_utterance, wait_for_dialog, then_wait
+from test.integrationtests.voight_kampff import emit_utterance, mycroft_responses, then_wait, wait_for_dialog
 
 
 @given('mycroft is singing')

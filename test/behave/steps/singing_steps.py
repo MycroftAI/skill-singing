@@ -45,7 +45,7 @@ def wait_for_audio_service(context, message_type):
 
 
 @given('mycroft is singing')
-def given_news_playing(context):
+def given_song_is_playing(context):
     emit_utterance(context.bus, "sing a song")
     wait_for_audio_service(context, 'play')
     time.sleep(3)

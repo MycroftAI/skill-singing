@@ -16,16 +16,38 @@ import time
 
 from behave import given, then
 
-from mycroft.audio import wait_while_speaking
+from test.integrationtests.voight_kampff import (
+    emit_utterance,
+    mycroft_responses,
+    then_wait
+)
 
-from test.integrationtests.voight_kampff import emit_utterance, mycroft_responses, then_wait, wait_for_dialog
+
+def wait_for_audio_service(context, message_type):
+    """Common method for detecting audio play, stop, or pause messages
+    
+    # TODO remove in 21.02"""
+    msg_type = 'mycroft.audio.service.{}'.format(message_type)
+
+    def check_for_msg(message):
+        return (message.msg_type == msg_type, '')
+
+    passed, debug = then_wait(msg_type, check_for_msg, context)
+
+    if not passed:
+        debug += mycroft_responses(context)
+    if not debug:
+        if message_type == 'play':
+            message_type = 'start'
+        debug = "Mycroft didn't {} playback".format(message_type)
+
+    assert passed, debug
 
 
 @given('mycroft is singing')
-def given_news_playing(context):
+def given_song_is_playing(context):
     emit_utterance(context.bus, "sing a song")
-    wait_for_dialog(context.bus, ['singing'])
-    wait_while_speaking()
+    wait_for_audio_service(context, 'play')
     time.sleep(3)
     context.bus.clear_messages()
 

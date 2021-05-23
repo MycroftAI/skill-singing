@@ -35,6 +35,7 @@ class SingingSkill(MycroftSkill):
             3: join(dirname(__file__), "popey-lose-yourself.mp3"),
             4: join(dirname(__file__), "popey-lovemetender.mp3"),
             5: join(dirname(__file__), "popey-rocketman.mp3"),
+            6: join(dirname(__file__), "drnimpo-robots.mp3"),
         }
 
     def initialize(self):
